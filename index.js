@@ -52,7 +52,7 @@ async function run () {
 
     // middleware
     const verifyToken = (req, res, next) => {
-      console.log('inside token', req.headers.authorization)
+      // console.log('inside token', req.headers.authorization)
       if (!req.headers.authorization) {
         return res.status(401).send({ message: 'forbidded access' })
       }
@@ -277,8 +277,6 @@ async function run () {
       res.send(result)
     })
 
-
-
     // guide related api
         //  Accept 
     app.patch('/assigned-tours/accept-by-menu/:menuId', async (req, res) => {
@@ -335,10 +333,6 @@ async function run () {
     app.post('/payment', async (req, res) => {
       const payment = req.body
       const paymentResult = await paymentCollection.insertOne(payment)
-      
-      // delete item from my booking
-      // const query = { _id: new ObjectId(payment.bookingId) }
-      // const deleteResult = await bookedCollection.deleteOne(query)
 
       res.send({ paymentResult })
     })
@@ -348,32 +342,11 @@ async function run () {
       res.send(result)
     })
 
-    //    // Update Added visa
-    //    app.put('/visa/:id', async (req, res) => {
-    //     const id = req.params.id
-    //     const query = { _id: new ObjectId(id) }
-    //     const options = { upsert: true }
-    //     const updatedVisa = req.body
-    //     const visa = {
-    //       $set: {
-    //         countryName: updatedVisa.countryName,
-    //         countryImage: updatedVisa.countryImage,
-    //         visaType: updatedVisa.countryImage,
-    //         processingTime: updatedVisa.processingTime,
-    //         fee: updatedVisa.fee,
-    //         validity: updatedVisa.validity,
-    //         applicationMethod: updatedVisa.applicationMethod
-    //       }
-    //     }
-    //       const result = await visaCollection.updateOne(query, visa, options)
-    //       res.send(result);
-    // })
-
     // Send a ping to confirm a successful connection
     // await client.db('admin').command({ ping: 1 })
-    console.log(
-      'Pinged your deployment. You successfully connected to MongoDB!'
-    )
+    // console.log(
+    //   'Pinged your deployment. You successfully connected to MongoDB!'
+    // )
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
