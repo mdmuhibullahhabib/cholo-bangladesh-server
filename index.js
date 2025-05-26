@@ -103,10 +103,10 @@ async function run () {
       const query = { email: email }
       const user = await userCollection.findOne(query)
 
-      const admin = user.role === 'admin'
+      // const admin = user.role === 'admin'
       const role = user.role
 
-      res.send({ admin, role })
+      res.send({ role })
     })
 
     app.patch('/users/role/:id', verifyToken, verifyAdmin, async (req, res) => {
@@ -206,6 +206,13 @@ async function run () {
       res.send(result)
     })
 
+    app.get('/story-random', async (req, res) => {
+      const result = await storyCollection
+        .aggregate([{ $sample: { size: 4 } }])
+        .toArray()
+      res.send(result)
+    })
+
     app.delete('/story/:id', async (req, res) => {
       const id = req.params.id
       const query = { _id: new ObjectId(id) }
@@ -261,7 +268,7 @@ async function run () {
       res.send(result)
     })
 
-     app.patch('/booked/:id', async (req, res) => {
+    app.patch('/booked/:id', async (req, res) => {
       const id = req.params.id
       const result = await bookedCollection.updateOne(
         { _id: new ObjectId(id), status: 'pending' },
@@ -269,7 +276,7 @@ async function run () {
       )
       res.send(result)
     })
-    
+
     app.delete('/booked/:id', async (req, res) => {
       const id = req.params.id
       const query = { _id: new ObjectId(id) }
@@ -278,41 +285,39 @@ async function run () {
     })
 
     // guide related api
-        //  Accept 
+    //  Accept
     app.patch('/assigned-tours/accept-by-menu/:menuId', async (req, res) => {
-      const menuId = req.params.menuId;
+      const menuId = req.params.menuId
 
       const bookingResult = await bookedCollection.updateOne(
         { menuId: menuId, status: 'in-review' },
         { $set: { status: 'accepted' } }
-      );
+      )
 
       const paymentResult = await paymentCollection.updateOne(
         { menuId: menuId },
         { $set: { status: 'accepted' } }
-      );
+      )
 
-      res.send({ bookingResult, paymentResult });
-    });
+      res.send({ bookingResult, paymentResult })
+    })
 
-    //  Reject 
+    //  Reject
     app.patch('/assigned-tours/reject-by-menu/:menuId', async (req, res) => {
-      const menuId = req.params.menuId;
+      const menuId = req.params.menuId
 
       const bookingResult = await bookedCollection.updateOne(
         { menuId: menuId, status: 'in-review' },
         { $set: { status: 'rejected' } }
-      );
+      )
 
       const paymentResult = await paymentCollection.updateOne(
         { menuId: menuId },
         { $set: { status: 'rejected' } }
-      );
+      )
 
-      res.send({ bookingResult, paymentResult });
-    });
-
-
+      res.send({ bookingResult, paymentResult })
+    })
 
     // Payment intent
     app.post('/create-payment-intent', async (req, res) => {
