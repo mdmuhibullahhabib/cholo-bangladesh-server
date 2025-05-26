@@ -194,7 +194,7 @@ async function run () {
       res.send(result)
     })
 
-    app.get('/story', async (req, res) => {
+    app.get('/stories', async (req, res) => {
       const result = await storyCollection.find().toArray()
       res.send(result)
     })
