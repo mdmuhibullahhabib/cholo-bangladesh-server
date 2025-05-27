@@ -13,7 +13,7 @@ app.use(
   cors({
     origin:[
       "http://localhost:5173",
-      "https://cholo-bangladesh-a12c4.web.app/",
+      "https://cholo-bangladesh-a12c4.web.app",
     ],
     credentials:true,
   }
