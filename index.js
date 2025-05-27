@@ -9,7 +9,15 @@ const { MongoClient, ObjectId } = require('mongodb')
 const { ServerApiVersion } = require('mongodb')
 
 // middleware
-app.use(cors())
+app.use(
+  cors({
+    origin:[
+      "http://localhost:5173",
+      "https://cholo-bangladesh-a12c4.web.app/",
+    ],
+    credentials:true,
+  }
+))
 app.use(express.json())
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.w5eri.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
